@@ -35,9 +35,6 @@ const Profile = () => {
     return myDates;
   }, [normalizedName]);
 
-  const selectedIsDutyDay =
-    !!date && dutyDates.has(new Date(date).toISOString().slice(0, 10));
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background">
       <h1 className="text-2xl font-bold text-foreground">{name?.toUpperCase()}'s Calendar</h1>
@@ -55,11 +52,6 @@ const Profile = () => {
             "bg-emerald-500 text-emerald-950 hover:bg-emerald-500 hover:text-emerald-950 focus:bg-emerald-500 focus:text-emerald-950",
         }}
       />
-      <p className="text-sm text-muted-foreground">
-        {selectedIsDutyDay
-          ? "This is your day to cook and do the dishes."
-          : "You are free from cooking and dishes on this day."}
-      </p>
       <Button variant="outline" onClick={() => navigate("/")}>Home</Button>
     </div>
   );
