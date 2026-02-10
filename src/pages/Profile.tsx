@@ -73,7 +73,7 @@ const Profile = () => {
       {isPairedName && date && (
         <div className="w-full max-w-sm rounded-md border p-4 text-center space-y-2">
           <p className="text-lg font-bold">
-            {isDutyDay ? "MANAGLUTO" : "IYUGIP MO"}
+            {isDutyDay ? "IYUGIP MO" : "MANAGLUTO"}
           </p>
           <p className="text-xs text-muted-foreground">
             {date.toDateString()}
