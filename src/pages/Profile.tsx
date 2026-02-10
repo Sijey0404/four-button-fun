@@ -22,10 +22,12 @@ const Profile = () => {
 
   // Pre-generate a full-year schedule for 2026, starting on February 11.
   // The schedule is generated per pair, so both members of a pair share the same duty days.
-  const dutyDates = useMemo(() => {
+  // We also track the index (0, 1, 2, ...) of each duty date per pair so we can
+  // alternate messages between "MANAGLUTO" and "MANAGURAS".
+  const dutyInfo = useMemo(() => {
     const pair = PAIRS.find((p) => p.members.includes(normalizedName || ""));
     if (!pair) {
-      return new Set<string>();
+      return { pair: undefined, indexByDate: new Map<string, number>() };
     }
 
     const schedule = generateChoreSchedule(
@@ -34,43 +36,57 @@ const Profile = () => {
       new Date(2026, 11, 31),
     );
 
-    const myDates = new Set<string>();
+    const indexByDate = new Map<string, number>();
+    let dutyIndex = 0;
 
     for (const entry of schedule) {
       if (entry.name === pair.id) {
-        // Use ISO date string without time for stable comparison.
-        myDates.add(entry.date.toISOString().slice(0, 10));
+        const iso = entry.date.toISOString().slice(0, 10);
+        indexByDate.set(iso, dutyIndex);
+        dutyIndex += 1;
       }
     }
 
-    return myDates;
+    return { pair, indexByDate };
   }, [normalizedName]);
 
-  const isPairedName = useMemo(
-    () => PAIRS.some((p) => p.members.includes(normalizedName || "")),
-    [normalizedName],
-  );
+  const isPairedName = !!dutyInfo.pair;
 
-  const isDutyDay =
-    !!date && dutyDates.has(new Date(date).toISOString().slice(0, 10));
+  const selectedIso = date ? new Date(date).toISOString().slice(0, 10) : undefined;
+  const dutyIndex = selectedIso ? dutyInfo.indexByDate.get(selectedIso) : undefined;
+  const isDutyDay = dutyIndex !== undefined;
 
   const isMhike = normalizedName === "mhike";
 
   // Determine the message shown for the selected date.
-  // - On a duty day:
-  //   - pair member 1 (janjan, mhike): "MANAGLUTO"
-  //   - pair member 2 (cj, renier): "MANAGURAS"
+  // For each pair:
+  // - On their shared duty days (index 0, 1, 2, ... for that pair):
+  //   - Even index (0, 2, 4, ...):
+  //       first member  -> "MANAGLUTO"
+  //       second member -> "MANAGURAS"
+  //   - Odd index (1, 3, 5, ...):
+  //       first member  -> "MANAGURAS"
+  //       second member -> "MANAGLUTO"
   // - On a non-duty day for that pair: "IYUGIP MO"
-  const choreMessage =
-    !date || !isPairedName
-      ? null
-      : isDutyDay
-        ? normalizedName === "janjan" || normalizedName === "mhike"
-          ? "MANAGLUTO"
-          : normalizedName === "cj" || normalizedName === "renier"
-            ? "MANAGURAS"
-            : "MANAGLUTO"
-        : "IYUGIP MO";
+  const choreMessage = (() => {
+    if (!date || !dutyInfo.pair || !normalizedName) return null;
+
+    const memberIndex = dutyInfo.pair.members.indexOf(normalizedName);
+    if (memberIndex === -1) return null;
+
+    if (!isDutyDay || dutyIndex === undefined) {
+      return "IYUGIP MO";
+    }
+
+    const isEvenDutyIndex = dutyIndex % 2 === 0;
+
+    if (isEvenDutyIndex) {
+      return memberIndex === 0 ? "MANAGLUTO" : "MANAGURAS";
+    }
+
+    // Odd duty index: swap roles
+    return memberIndex === 0 ? "MANAGURAS" : "MANAGLUTO";
+  })();
 
   return (
     <div
