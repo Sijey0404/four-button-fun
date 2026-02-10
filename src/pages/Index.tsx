@@ -8,10 +8,10 @@ const Index = () => {
           Welcome
         </h1>
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
-          <Button size="lg">Button 1</Button>
-          <Button size="lg" variant="secondary">Button 2</Button>
-          <Button size="lg" variant="outline">Button 3</Button>
-          <Button size="lg" variant="destructive">Button 4</Button>
+          <Button size="lg">JANJAN</Button>
+          <Button size="lg" variant="secondary">CJ</Button>
+          <Button size="lg" variant="outline">MHIKE</Button>
+          <Button size="lg" variant="destructive">RENIER</Button>
         </div>
       </div>
     </div>
