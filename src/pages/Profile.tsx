@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { generateChoreSchedule } from "@/lib/schedule";
 
-const HOUSEHOLD_NAMES = ["janjan", "cj", "mhike", "renier"] as const;
+// Define pairs: (name1, name2) share a schedule, (name3, name4) share a schedule.
+const PAIRS = [
+  { id: "pair-1", members: ["janjan", "cj"] },
+  { id: "pair-2", members: ["mhike", "renier"] },
+] as const;
 
 const Profile = () => {
   const { name } = useParams();
@@ -16,17 +20,23 @@ const Profile = () => {
   const normalizedName = name?.toLowerCase();
 
   // Pre-generate a full-year schedule for 2026, starting on February 11.
+  // The schedule is generated per pair, so both members of a pair share the same duty days.
   const dutyDates = useMemo(() => {
-    if (!normalizedName || !HOUSEHOLD_NAMES.includes(normalizedName as (typeof HOUSEHOLD_NAMES)[number])) {
+    const pair = PAIRS.find((p) => p.members.includes(normalizedName || ""));
+    if (!pair) {
       return new Set<string>();
     }
 
-    const schedule = generateChoreSchedule(HOUSEHOLD_NAMES as unknown as string[], new Date(2026, 1, 11), new Date(2026, 11, 31));
+    const schedule = generateChoreSchedule(
+      PAIRS.map((p) => p.id),
+      new Date(2026, 1, 11),
+      new Date(2026, 11, 31),
+    );
 
     const myDates = new Set<string>();
 
     for (const entry of schedule) {
-      if (entry.name === normalizedName) {
+      if (entry.name === pair.id) {
         // Use ISO date string without time for stable comparison.
         myDates.add(entry.date.toISOString().slice(0, 10));
       }
