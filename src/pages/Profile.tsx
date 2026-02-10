@@ -56,6 +56,22 @@ const Profile = () => {
 
   const isMhike = normalizedName === "mhike";
 
+  // Determine the message shown for the selected date.
+  // - On a duty day:
+  //   - pair member 1 (janjan, mhike): "MANAGLUTO"
+  //   - pair member 2 (cj, renier): "MANAGURAS"
+  // - On a non-duty day for that pair: "IYUGIP MO"
+  const choreMessage =
+    !date || !isPairedName
+      ? null
+      : isDutyDay
+        ? normalizedName === "janjan" || normalizedName === "mhike"
+          ? "MANAGLUTO"
+          : normalizedName === "cj" || normalizedName === "renier"
+            ? "MANAGURAS"
+            : "MANAGLUTO"
+        : "IYUGIP MO";
+
   return (
     <div
       className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background bg-cover bg-center"
@@ -76,10 +92,10 @@ const Profile = () => {
             "bg-emerald-500 text-emerald-950 hover:bg-emerald-500 hover:text-emerald-950 focus:bg-emerald-500 focus:text-emerald-950",
         }}
       />
-      {isPairedName && date && (
+      {choreMessage && date && (
         <div className="w-full max-w-sm rounded-md border p-4 text-center space-y-2">
           <p className="text-lg font-bold">
-            {isDutyDay ? "IYUGIP MO" : "MANAGLUTO"}
+            {choreMessage}
           </p>
           <p className="text-xs text-muted-foreground">
             {date.toDateString()}
