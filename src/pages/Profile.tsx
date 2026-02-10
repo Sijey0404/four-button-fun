@@ -10,21 +10,18 @@ const HOUSEHOLD_NAMES = ["janjan", "cj", "mhike", "renier"] as const;
 const Profile = () => {
   const { name } = useParams();
   const navigate = useNavigate();
-  const [date, setDate] = useState<Date | undefined>(new Date(2026, 1, 10));
+  // Start viewing the calendar on February 11, 2026
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 1, 11));
 
   const normalizedName = name?.toLowerCase();
 
-  // Pre-generate a full-year schedule for 2026.
+  // Pre-generate a full-year schedule for 2026, starting on February 11.
   const dutyDates = useMemo(() => {
     if (!normalizedName || !HOUSEHOLD_NAMES.includes(normalizedName as (typeof HOUSEHOLD_NAMES)[number])) {
       return new Set<string>();
     }
 
-    const schedule = generateChoreSchedule(
-      HOUSEHOLD_NAMES as unknown as string[],
-      new Date(2026, 0, 1),
-      new Date(2026, 11, 31),
-    );
+    const schedule = generateChoreSchedule(HOUSEHOLD_NAMES as unknown as string[], new Date(2026, 1, 11), new Date(2026, 11, 31));
 
     const myDates = new Set<string>();
 
