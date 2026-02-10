@@ -93,11 +93,17 @@ const Profile = () => {
   })();
 
   return (
-    <div
-      className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background bg-cover bg-center"
-      style={isMhike ? { backgroundImage: `url(${mhikeBg})` } : undefined}
-    >
-      <h1 className="text-2xl font-bold text-foreground">{name?.toUpperCase()}'s Calendar</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background">
+      <div className="flex items-center gap-4">
+        {isMhike && (
+          <img
+            src={mhikeBg}
+            alt="Mhike"
+            className="h-16 w-16 rounded-full object-cover border-2 border-primary"
+          />
+        )}
+        <h1 className="text-2xl font-bold text-foreground">{name?.toUpperCase()}'s Calendar</h1>
+      </div>
       <Calendar
         mode="single"
         selected={date}
