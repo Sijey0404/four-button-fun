@@ -7,10 +7,10 @@ import { generateChoreSchedule } from "@/lib/schedule";
 import mhikeBg from "@/assets/mhike-bg.png";
 
 // Define pairs: (name1, name2) share a schedule, (name3, name4) share a schedule.
-const PAIRS = [
+const PAIRS: { id: string; members: string[] }[] = [
   { id: "pair-1", members: ["janjan", "cj"] },
   { id: "pair-2", members: ["mhike", "renier"] },
-] as const;
+];
 
 const Profile = () => {
   const { name } = useParams();
@@ -101,7 +101,7 @@ const Profile = () => {
         defaultMonth={new Date(2026, 1)}
         className="rounded-md border pointer-events-auto"
         modifiers={{
-          duty: Array.from(dutyDates).map((iso) => new Date(iso)),
+          duty: Array.from(dutyInfo.indexByDate.keys()).map((iso) => new Date(iso)),
         }}
         modifiersClassNames={{
           duty:
