@@ -12,7 +12,7 @@ const Index = () => {
     >
       <div className="text-center space-y-8 bg-black/50 px-6 py-8 rounded-xl">
         <h1 className="text-4xl font-bold tracking-tight text-white">
-          Welcome
+          ESKEDYUL
         </h1>
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
           <Button size="lg" onClick={() => navigate("/janjan")}>JANJAN</Button>
