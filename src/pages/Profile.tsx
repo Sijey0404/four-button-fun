@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { generateChoreSchedule } from "@/lib/schedule";
 import mhikeBg from "@/assets/mhike-bg.png";
+import renierBg from "@/assets/renier-bg.png";
 
 // Define pairs: (name1, name2) share a schedule, (name3, name4) share a schedule.
 const PAIRS = [
@@ -61,6 +62,7 @@ const Profile = () => {
   const isDutyDay = dutyIndex !== undefined;
 
   const isMhike = normalizedName === "mhike";
+  const isRenier = normalizedName === "renier";
 
   // Determine the message shown for the selected date.
   // For each pair:
@@ -99,6 +101,13 @@ const Profile = () => {
           <img
             src={mhikeBg}
             alt="Mhike"
+            className="h-16 w-16 rounded-full object-cover border-2 border-primary"
+          />
+        )}
+        {isRenier && (
+          <img
+            src={renierBg}
+            alt="Renier"
             className="h-16 w-16 rounded-full object-cover border-2 border-primary"
           />
         )}
