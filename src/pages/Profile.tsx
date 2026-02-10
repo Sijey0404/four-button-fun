@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { generateChoreSchedule } from "@/lib/schedule";
+import mhikeBg from "@/assets/mhike-bg.png";
 
 // Define pairs: (name1, name2) share a schedule, (name3, name4) share a schedule.
 const PAIRS = [
@@ -53,8 +54,13 @@ const Profile = () => {
   const isDutyDay =
     !!date && dutyDates.has(new Date(date).toISOString().slice(0, 10));
 
+  const isMhike = normalizedName === "mhike";
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background">
+    <div
+      className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background bg-cover bg-center"
+      style={isMhike ? { backgroundImage: `url(${mhikeBg})` } : undefined}
+    >
       <h1 className="text-2xl font-bold text-foreground">{name?.toUpperCase()}'s Calendar</h1>
       <Calendar
         mode="single"
