@@ -6,6 +6,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { generateChoreSchedule } from "@/lib/schedule";
 import mhikeBg from "@/assets/mhike-bg.png";
 import renierBg from "@/assets/renier-bg.png";
+import janjanBg from "@/assets/janjan-bg.png";
+import cjBg from "@/assets/cj-bg.png";
 
 // Define pairs: (name1, name2) share a schedule, (name3, name4) share a schedule.
 const PAIRS = [
@@ -63,6 +65,8 @@ const Profile = () => {
 
   const isMhike = normalizedName === "mhike";
   const isRenier = normalizedName === "renier";
+  const isJanjan = normalizedName === "janjan";
+  const isCj = normalizedName === "cj";
 
   // Determine the message shown for the selected date.
   // For each pair:
@@ -97,6 +101,20 @@ const Profile = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background">
       <div className="flex items-center gap-4">
+        {isJanjan && (
+          <img
+            src={janjanBg}
+            alt="Janjan"
+            className="h-16 w-16 rounded-full object-cover border-2 border-primary"
+          />
+        )}
+        {isCj && (
+          <img
+            src={cjBg}
+            alt="CJ"
+            className="h-16 w-16 rounded-full object-cover border-2 border-primary"
+          />
+        )}
         {isMhike && (
           <img
             src={mhikeBg}
