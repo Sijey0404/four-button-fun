@@ -7,10 +7,10 @@ import { generateChoreSchedule } from "@/lib/schedule";
 import mhikeBg from "@/assets/mhike-bg.png";
 
 // Define pairs: (name1, name2) share a schedule, (name3, name4) share a schedule.
-const PAIRS: { id: string; members: string[] }[] = [
+const PAIRS = [
   { id: "pair-1", members: ["janjan", "cj"] },
   { id: "pair-2", members: ["mhike", "renier"] },
-];
+] as const;
 
 const Profile = () => {
   const { name } = useParams();
@@ -22,12 +22,14 @@ const Profile = () => {
 
   // Pre-generate a full-year schedule for 2026, starting on February 11.
   // The schedule is generated per pair, so both members of a pair share the same duty days.
-  // We also track the index (0, 1, 2, ...) of each duty date per pair so we can
-  // alternate messages between "MANAGLUTO" and "MANAGURAS".
+  // We also track:
+  // - dutyDates: all Date objects where this pair has chores (for coloring the calendar)
+  // - indexByDate: the index (0, 1, 2, ...) of each duty date per pair, so we can
+  //   alternate messages between "MANAGLUTO" and "MANAGURAS".
   const dutyInfo = useMemo(() => {
     const pair = PAIRS.find((p) => p.members.includes(normalizedName || ""));
     if (!pair) {
-      return { pair: undefined, indexByDate: new Map<string, number>() };
+      return { pair: undefined, indexByDate: new Map<string, number>(), dutyDates: [] as Date[] };
     }
 
     const schedule = generateChoreSchedule(
@@ -37,17 +39,19 @@ const Profile = () => {
     );
 
     const indexByDate = new Map<string, number>();
+    const dutyDates: Date[] = [];
     let dutyIndex = 0;
 
     for (const entry of schedule) {
       if (entry.name === pair.id) {
         const iso = entry.date.toISOString().slice(0, 10);
         indexByDate.set(iso, dutyIndex);
+        dutyDates.push(new Date(entry.date));
         dutyIndex += 1;
       }
     }
 
-    return { pair, indexByDate };
+    return { pair, indexByDate, dutyDates };
   }, [normalizedName]);
 
   const isPairedName = !!dutyInfo.pair;
@@ -101,7 +105,7 @@ const Profile = () => {
         defaultMonth={new Date(2026, 1)}
         className="rounded-md border pointer-events-auto"
         modifiers={{
-          duty: Array.from(dutyInfo.indexByDate.keys()).map((iso) => new Date(iso)),
+          duty: dutyInfo.dutyDates,
         }}
         modifiersClassNames={{
           duty:
