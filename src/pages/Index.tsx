@@ -16,9 +16,9 @@ const Index = () => {
         </h1>
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
           <Button size="lg" onClick={() => navigate("/janjan")}>JANJAN</Button>
-          <Button size="lg" variant="secondary" onClick={() => navigate("/cj")}>CJ</Button>
-          <Button size="lg" variant="outline" onClick={() => navigate("/mhike")}>MHIKE</Button>
-          <Button size="lg" variant="destructive" onClick={() => navigate("/renier")}>RENIER</Button>
+          <Button size="lg" onClick={() => navigate("/cj")}>CJ</Button>
+          <Button size="lg" onClick={() => navigate("/mhike")}>MHIKE</Button>
+          <Button size="lg" onClick={() => navigate("/renier")}>RENIER</Button>
         </div>
       </div>
     </div>
